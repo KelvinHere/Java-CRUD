@@ -12,7 +12,7 @@ public class ItemManager {
 	public ItemManager() {
 		this.conn = DatabaseConnect.connect();
 		crud = new CRUDOperations(conn);
-		gui = new GUI();
+		gui = new GUI(conn);
 	}
 	
 	
