@@ -83,9 +83,41 @@ public class GUI {
 	
 	private class CreateButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Create");
+			//Create Option Pane			
+			JTextField skuField = new JTextField();
+			JTextField descriptionField = new JTextField();
+			JTextField netCostField = new JTextField();
+			Object[] message = {
+				"SKU (Text):", skuField,
+				"Description (Text):", descriptionField,
+				"NetCost (Decimal):", netCostField,
+			};
+
+			int option = JOptionPane.showConfirmDialog(null, message, "Create Item", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				// Text field inputs
+				Boolean priceFormatError = false; 
+				String sku = skuField.getText();
+				String description = descriptionField.getText();
+				Double netCost = null;
+				try {
+					netCost = Double.parseDouble(netCostField.getText());
+				} catch (NumberFormatException e1) {
+					priceFormatError = true;
+				}
+				
+				// Update database and redraw table if inputs are valid
+			    if (!skuField.getText().equals("") && !descriptionField.getText().equals("") && priceFormatError == false) {
+			        crud.create(sku, description, netCost);
+			    	System.out.println("Created!");
+			    	updateDataTable();
+			    } else {
+			    	JOptionPane.showMessageDialog(null, "Input Error - Action Stopped");
+			    }
+			}
 		}
 	}
+	
 	
 	private class ReadButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -93,17 +125,20 @@ public class GUI {
 		}
 	}
 	
+	
 	private class UpdateButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Update");
 		}
 	}
 	
+	
 	private class DeleteButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Delete");
 		}
 	}
+	
 	
 	private class ImportButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -112,6 +147,7 @@ public class GUI {
 			updateDataTable();
 		}
 	}
+	
 	
 	private void updateDataTable() {
 		// Clear table

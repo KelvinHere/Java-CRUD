@@ -25,9 +25,5 @@ public class ItemManager {
 		//manager.connect(im.conn);
 		//manager.start();
 		/* End of debug GUI database */
-		
-		im.crud.create("ADFA", "Roca Sink", 192.99);
-		im.crud.readBySku("ADFA");
-		
 	}
 }
