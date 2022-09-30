@@ -15,15 +15,17 @@ public class ItemManager {
 	
 	
 	public static void main(String[] args) {
-		ItemManager runner = new ItemManager();
+		ItemManager im = new ItemManager();
 
 		/* Debug GUI database 	*/		
 		DatabaseManagerSwing manager = new DatabaseManagerSwing();
 		manager.main();
-		manager.connect(runner.conn);
+		manager.connect(im.conn);
 		manager.start();
 		/* End of debug GUI database */
 		
-		runner.crud.insertLineItem("ADFA", "Roca Sink", 192.99);
+		im.crud.create("ADFA", "Roca Sink", 192.99);
+		im.crud.readBySku("ADFA");
+		
 	}
 }

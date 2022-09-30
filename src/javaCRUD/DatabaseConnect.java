@@ -15,7 +15,6 @@ public class DatabaseConnect {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection(DB, USER_NAME, PASSWORD);
-			System.out.println("Connection established");
 			Statement stmnt = conn.createStatement();
 			stmnt.execute(ModelItems.itemModel());
 			
