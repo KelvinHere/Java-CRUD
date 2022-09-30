@@ -6,11 +6,13 @@ import org.hsqldb.util.DatabaseManagerSwing;
 public class ItemManager {
 	Connection conn;
 	CRUDOperations crud;
+	GUI gui;
 	
 	
 	public ItemManager() {
 		this.conn = DatabaseConnect.connect();
 		crud = new CRUDOperations(conn);
+		gui = new GUI();
 	}
 	
 	
