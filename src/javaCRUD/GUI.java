@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class GUI {
 	final static int FRAME_WIDTH = 1280;
@@ -19,10 +22,15 @@ public class GUI {
 	JButton deleteButton;
 	JButton importButton;
 	
-	Connection conn;
+	DefaultTableModel model = new DefaultTableModel(TABLE_DATA, TABLE_HEADERS);
+	JTable dataTable;
 	
-	public GUI(Connection conn) {
+	Connection conn;
+	CRUDOperations crud;
+	
+	public GUI(Connection conn, CRUDOperations crud) {
 		this.conn = conn;
+		this.crud = crud;
 		
 		frame = new JFrame("CRUD");
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -42,7 +50,7 @@ public class GUI {
         // Display panel
         JPanel dataPanel = new JPanel(new BorderLayout());
         mainPanel.add(BorderLayout.CENTER, dataPanel);
-        JTable dataTable = new JTable(TABLE_DATA, TABLE_HEADERS);
+        dataTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(dataTable);
         dataPanel.add(scrollPane);
         
@@ -100,6 +108,29 @@ public class GUI {
 	private class ImportButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Import");
+			ImportData.createPlaceholders(conn);
+			updateDataTable();
+		}
+	}
+	
+	private void updateDataTable() {
+		// Clear table
+		model.setRowCount(0);
+		
+		// Update table
+		ResultSet rs = crud.getAllLines();
+		
+		try {
+			while (rs.next()) {
+				System.out.println(rs.getString("SKU").toString());
+				String sku = rs.getString("SKU");
+				String description = rs.getString("Description");
+				Double netCost = rs.getDouble("Net_Cost");
+				model.addRow(new Object[] {sku, description, netCost});
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

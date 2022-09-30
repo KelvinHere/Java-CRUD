@@ -11,8 +11,8 @@ public class ItemManager {
 	
 	public ItemManager() {
 		this.conn = DatabaseConnect.connect();
-		crud = new CRUDOperations(conn);
-		gui = new GUI(conn);
+		this.crud = new CRUDOperations(conn);
+		gui = new GUI(this.conn, this.crud);
 	}
 	
 	
@@ -20,10 +20,10 @@ public class ItemManager {
 		ItemManager im = new ItemManager();
 
 		/* Debug GUI database 	*/		
-		DatabaseManagerSwing manager = new DatabaseManagerSwing();
-		manager.main();
-		manager.connect(im.conn);
-		manager.start();
+		//DatabaseManagerSwing manager = new DatabaseManagerSwing();
+		//manager.main();
+		//manager.connect(im.conn);
+		//manager.start();
 		/* End of debug GUI database */
 		
 		im.crud.create("ADFA", "Roca Sink", 192.99);

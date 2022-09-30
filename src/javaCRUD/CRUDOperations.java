@@ -42,6 +42,19 @@ public class CRUDOperations {
 	}
 	
 	
+	public ResultSet getAllLines() {
+		ResultSet rs = null;
+		try {
+			String sql = "SELECT * FROM items;";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+		}catch (SQLException e) {
+			System.out.println(e.toString() + " *CRUDOperations.getAllLines");
+		}
+		return rs;
+	}
+	
+	
 	public void deleteBySku(String sku) {
 		try {
 			String sql = String.format("DELETE FROM items WHERE SKU = '%s';", sku);
