@@ -51,6 +51,7 @@ public class GUI {
         JPanel dataPanel = new JPanel(new BorderLayout());
         mainPanel.add(BorderLayout.CENTER, dataPanel);
         dataTable = new JTable(model);
+        dataTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(dataTable);
         dataPanel.add(scrollPane);
         
