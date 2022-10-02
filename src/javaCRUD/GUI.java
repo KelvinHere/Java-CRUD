@@ -136,6 +136,10 @@ public class GUI {
 	private class DeleteButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Delete");
+			int selectedRow = dataTable.getSelectedRow();
+			String deleteSku = dataTable.getValueAt(selectedRow, 0).toString();
+			crud.deleteBySku(deleteSku);
+			updateDataTable();
 		}
 	}
 	
