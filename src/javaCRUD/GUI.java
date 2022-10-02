@@ -135,7 +135,6 @@ public class GUI {
 	
 	private class ImportButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Import");
 			ImportData.createPlaceholders(conn);
 			updateDataTable();
 		}
@@ -145,13 +144,10 @@ public class GUI {
 	private void updateDataTable() {
 		// Clear table
 		model.setRowCount(0);
-		
 		// Update table
 		ResultSet rs = crud.getAllLines();
-		
 		try {
 			while (rs.next()) {
-				System.out.println(rs.getString("SKU").toString());
 				String sku = rs.getString("SKU");
 				String description = rs.getString("Description");
 				Double netCost = rs.getDouble("Net_Cost");

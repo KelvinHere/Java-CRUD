@@ -1,9 +1,8 @@
 package javaCRUD;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
+import javax.swing.JOptionPane;
 
 public class CRUDOperations {
 	Connection conn;
@@ -23,8 +22,11 @@ public class CRUDOperations {
 			this.ps.setString(2, description);
 			this.ps.setDouble(3, netCost);
 			this.ps.execute();
-		}catch (SQLException e) {
-			System.out.println(e.toString() + " *CRUDOperations.create");
+		} catch (SQLIntegrityConstraintViolationException ed) {
+			JOptionPane.showMessageDialog(null, "ERROR : Duplicate SKU - Creation aborted");
+		} catch (SQLException e) {
+			String errorCode = String.valueOf(e.getErrorCode());
+			JOptionPane.showMessageDialog(null, "ERROR : Code " + errorCode);
 		}
 	}
 	
