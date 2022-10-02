@@ -10,6 +10,17 @@ public class UpdateCreatePopup {
 	private Double netCost = null;
 	private CRUDOperations crud;
 	
+	Boolean priceFormatError = false;
+	JTextField skuField = new JTextField();
+	JTextField descriptionField = new JTextField();
+	JTextField netCostField = new JTextField();
+	Object[] message = {
+			"SKU (Text):", skuField,
+			"Description (Text):", descriptionField,
+			"NetCost (Decimal):", netCostField,
+		};
+	
+	
 	public UpdateCreatePopup(CRUDOperations crud, String sku, String description, String netCostAsString) {
 		this.crud = crud;
 		this.sku = sku;
@@ -18,55 +29,59 @@ public class UpdateCreatePopup {
 		this.netCostAsString = netCostAsString;
 	}
 	
+	
 	public UpdateCreatePopup(CRUDOperations crud) {
 		this.crud = crud;
 	}
 	
+	
 	public void update() {
-		updateCreate("Update");
+		displayPopup("Update");
 	}
+	
 	
 	public void create() {
-		updateCreate("Create");
+		displayPopup("Create");
 	}
 	
-	public void updateCreate(String action) {
-		//Create Option Pane
-		JTextField skuField = new JTextField(sku);
-		JTextField descriptionField = new JTextField(description);
-		JTextField netCostField = new JTextField(netCostAsString);
-		Object[] message = {
-			"SKU (Text):", skuField,
-			"Description (Text):", descriptionField,
-			"NetCost (Decimal):", netCostField,
-		};
+	
+	private void displayPopup(String action) {
+		//Create OptionPane fields contents and display
+		skuField.setText(sku);
+		descriptionField.setText(description);
+		netCostField.setText(netCostAsString);
+		int option = JOptionPane.showConfirmDialog(null, this.message, "Create Item", JOptionPane.OK_CANCEL_OPTION);
 
-		int option = JOptionPane.showConfirmDialog(null, message, "Create Item", JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION) {
-			// Text field inputs
-			Boolean priceFormatError = false; 
-			sku = skuField.getText();
-			description = descriptionField.getText();
-			try {
-				netCost = Double.parseDouble(netCostField.getText());
-			} catch (NumberFormatException e1) {
-				priceFormatError = true;
-			}
-			
-			// Update database and redraw table if inputs are valid
-		    if (!skuField.getText().equals("") && !descriptionField.getText().equals("") && priceFormatError == false) {
-		    	switch(action) {
-		    	case "Update":
-		    		crud.updateBySku(originalSku, sku, description, netCost);
-		    		break;
-		    	case "Create":
-		    		crud.create(sku, description, netCost);
-		    		break;
-		    	}
-		    	
-		    } else {
-		    	JOptionPane.showMessageDialog(null, "Input Error - Action Stopped");
-		    }
+			updateDB(action);
 		}
+	}
+	
+	
+	public void updateDB(String action) {
+		// Retrieve data from options pane text fields
+		String errorMessage = "Error in SKU or Description";
+		sku = skuField.getText();
+		description = descriptionField.getText();
+		try {
+			netCost = Double.parseDouble(netCostField.getText());
+		} catch (NumberFormatException e1) {
+			priceFormatError = true;
+			errorMessage = "Error Net_Cost needs to be decimal";
+		}
+
+		// Update database inputs are valid
+	    if (!skuField.getText().equals("") && !descriptionField.getText().equals("") && priceFormatError == false) {
+	    	switch(action) {
+	    	case "Update":
+	    		crud.updateBySku(originalSku, sku, description, netCost);
+	    		break;
+	    	case "Create":
+	    		crud.create(sku, description, netCost);
+	    		break;
+	    	}
+	    } else {
+    		JOptionPane.showMessageDialog(null, "Input Error - " + errorMessage);
+	    }
 	}
 }
