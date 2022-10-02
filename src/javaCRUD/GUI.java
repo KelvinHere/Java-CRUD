@@ -129,6 +129,8 @@ public class GUI {
 	private class ReadButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Read");
+			ReadPopup readPopup = new ReadPopup(crud);
+			readPopup.bySku();
 		}
 	}
 	
