@@ -1,7 +1,6 @@
 package javaCRUD;
 
 import java.sql.Connection;
-import org.hsqldb.util.DatabaseManagerSwing;
 
 public class ItemManager {
 	Connection conn;
@@ -18,12 +17,5 @@ public class ItemManager {
 	
 	public static void main(String[] args) {
 		ItemManager im = new ItemManager();
-
-		/* Debug GUI database 	*/		
-		//DatabaseManagerSwing manager = new DatabaseManagerSwing();
-		//manager.main();
-		//manager.connect(im.conn);
-		//manager.start();
-		/* End of debug GUI database */
 	}
 }

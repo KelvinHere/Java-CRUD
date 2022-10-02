@@ -161,6 +161,4 @@ public class GUI {
 			e.printStackTrace();
 		}
 	}
-	
-	
 }
