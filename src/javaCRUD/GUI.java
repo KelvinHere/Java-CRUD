@@ -73,6 +73,7 @@ public class GUI {
         frame.setVisible(true);
 	}
 	
+	
 	private void setListeners()  {
 		createButton.addActionListener(new CreateButtonListener());
 		readButton.addActionListener(new ReadButtonListener());
@@ -81,39 +82,44 @@ public class GUI {
 		importButton.addActionListener(new ImportButtonListener());
 	}
 	
+	
 	private class CreateButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//Create Option Pane			
-			JTextField skuField = new JTextField();
-			JTextField descriptionField = new JTextField();
-			JTextField netCostField = new JTextField();
-			Object[] message = {
-				"SKU (Text):", skuField,
-				"Description (Text):", descriptionField,
-				"NetCost (Decimal):", netCostField,
-			};
-
-			int option = JOptionPane.showConfirmDialog(null, message, "Create Item", JOptionPane.OK_CANCEL_OPTION);
-			if (option == JOptionPane.OK_OPTION) {
-				// Text field inputs
-				Boolean priceFormatError = false; 
-				String sku = skuField.getText();
-				String description = descriptionField.getText();
-				Double netCost = null;
-				try {
-					netCost = Double.parseDouble(netCostField.getText());
-				} catch (NumberFormatException e1) {
-					priceFormatError = true;
-				}
-				
-				// Update database and redraw table if inputs are valid
-			    if (!skuField.getText().equals("") && !descriptionField.getText().equals("") && priceFormatError == false) {
-			        crud.create(sku, description, netCost);
-			    	System.out.println("Created!");
-			    	updateDataTable();
-			    } else {
-			    	JOptionPane.showMessageDialog(null, "Input Error - Action Stopped");
-			    }
+			UpdateCreatePopup updateCreatePopup = new UpdateCreatePopup(crud);
+			updateCreatePopup.create();
+			updateDataTable();
+		}
+	}
+	
+	
+	private class UpdateButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (!dataTable.getSelectionModel().isSelectionEmpty()) {
+				// Get current values
+				int selectedRow = dataTable.getSelectedRow();
+				String sku = dataTable.getValueAt(selectedRow, 0).toString();
+				String description = dataTable.getValueAt(selectedRow, 1).toString();
+				String netCostAsString = dataTable.getValueAt(selectedRow, 2).toString();
+				// Pass to UpdateCreatePopup overloaded
+				UpdateCreatePopup updateCreatePopup = new UpdateCreatePopup(crud, sku, description, netCostAsString);
+				updateCreatePopup.update();
+				updateDataTable();
+			} else {
+				JOptionPane.showMessageDialog(null, "Please select a row first");
+			}
+		}
+	}
+	
+	
+	private class DeleteButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (!dataTable.getSelectionModel().isSelectionEmpty()) {
+				int selectedRow = dataTable.getSelectedRow();
+				String deleteSku = dataTable.getValueAt(selectedRow, 0).toString();
+				crud.deleteBySku(deleteSku);
+				updateDataTable();
+			} else {
+				JOptionPane.showMessageDialog(null, "Please select a row first");
 			}
 		}
 	}
@@ -122,24 +128,6 @@ public class GUI {
 	private class ReadButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Read");
-		}
-	}
-	
-	
-	private class UpdateButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Update");
-		}
-	}
-	
-	
-	private class DeleteButtonListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Delete");
-			int selectedRow = dataTable.getSelectedRow();
-			String deleteSku = dataTable.getValueAt(selectedRow, 0).toString();
-			crud.deleteBySku(deleteSku);
-			updateDataTable();
 		}
 	}
 	
@@ -173,4 +161,6 @@ public class GUI {
 			e.printStackTrace();
 		}
 	}
+	
+	
 }
