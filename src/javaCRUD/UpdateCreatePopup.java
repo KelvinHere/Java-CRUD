@@ -10,8 +10,7 @@ public class UpdateCreatePopup {
 	private Double netCost = null;
 	private CRUDOperations crud;
 	
-	Boolean priceFormatError = false;
-	JTextField skuField = new JTextField();
+		JTextField skuField = new JTextField();
 	JTextField descriptionField = new JTextField();
 	JTextField netCostField = new JTextField();
 	Object[] message = {
@@ -21,12 +20,12 @@ public class UpdateCreatePopup {
 		};
 	
 	
-	public UpdateCreatePopup(CRUDOperations crud, String sku, String description, String netCostAsString) {
+	public UpdateCreatePopup(CRUDOperations crud, LineItem item) {
 		this.crud = crud;
-		this.sku = sku;
-		this.originalSku = sku;
-		this.description = description;
-		this.netCostAsString = netCostAsString;
+		this.sku = item.getSku();
+		this.originalSku = item.getSku();
+		this.description = item.getDescription();
+		this.netCostAsString = item.getNetCostString();
 	}
 	
 	
@@ -50,7 +49,7 @@ public class UpdateCreatePopup {
 		skuField.setText(sku);
 		descriptionField.setText(description);
 		netCostField.setText(netCostAsString);
-		int option = JOptionPane.showConfirmDialog(null, this.message, "Create Item", JOptionPane.OK_CANCEL_OPTION);
+		int option = JOptionPane.showConfirmDialog(null, this.message, action, JOptionPane.OK_CANCEL_OPTION);
 
 		if (option == JOptionPane.OK_OPTION) {
 			updateDB(action);
@@ -61,10 +60,12 @@ public class UpdateCreatePopup {
 	public void updateDB(String action) {
 		// Retrieve data from options pane text fields
 		String errorMessage = "Error in SKU or Description";
-		sku = skuField.getText();
-		description = descriptionField.getText();
+		Boolean priceFormatError = false;
+		LineItem item = new LineItem();
+		item.setSku(skuField.getText());
+		item.setDescription(descriptionField.getText());
 		try {
-			netCost = Double.parseDouble(netCostField.getText());
+			item.setNetCost(Double.parseDouble(netCostField.getText()));
 		} catch (NumberFormatException e1) {
 			priceFormatError = true;
 			errorMessage = "Error Net_Cost needs to be decimal";
@@ -74,10 +75,10 @@ public class UpdateCreatePopup {
 	    if (!skuField.getText().equals("") && !descriptionField.getText().equals("") && priceFormatError == false) {
 	    	switch(action) {
 	    	case "Update":
-	    		crud.updateBySku(originalSku, sku, description, netCost);
+	    		crud.updateBySku(originalSku, item);
 	    		break;
 	    	case "Create":
-	    		crud.create(sku, description, netCost);
+	    		crud.create(item);
 	    		break;
 	    	}
 	    } else {

@@ -2,6 +2,8 @@ package javaCRUD;
 
 import java.sql.Connection;
 
+import org.hsqldb.util.DatabaseManagerSwing;
+
 public class ItemManager {
 	Connection conn;
 	CRUDOperations crud;

@@ -96,13 +96,12 @@ public class GUI {
 	private class UpdateButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (!dataTable.getSelectionModel().isSelectionEmpty()) {
-				// Get current values
-				int selectedRow = dataTable.getSelectedRow();
-				String sku = dataTable.getValueAt(selectedRow, 0).toString();
-				String description = dataTable.getValueAt(selectedRow, 1).toString();
-				String netCostAsString = dataTable.getValueAt(selectedRow, 2).toString();
-				// Pass to UpdateCreatePopup overloaded
-				UpdateCreatePopup updateCreatePopup = new UpdateCreatePopup(crud, sku, description, netCostAsString);
+				// Get selected sku values from database
+				String selectedSku = dataTable.getValueAt(dataTable.getSelectedRow(), 0).toString();
+				ResultSet rs = crud.readBySku(selectedSku); 
+				LineItem item = new LineItem(rs);
+				// Update item through pop-up
+				UpdateCreatePopup updateCreatePopup = new UpdateCreatePopup(crud, item);
 				updateCreatePopup.update();
 				updateDataTable();
 			} else {
@@ -115,9 +114,8 @@ public class GUI {
 	private class DeleteButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (!dataTable.getSelectionModel().isSelectionEmpty()) {
-				int selectedRow = dataTable.getSelectedRow();
-				String deleteSku = dataTable.getValueAt(selectedRow, 0).toString();
-				crud.deleteBySku(deleteSku);
+				String selectedSku = dataTable.getValueAt(dataTable.getSelectedRow(), 0).toString();
+				crud.deleteBySku(selectedSku);
 				updateDataTable();
 			} else {
 				JOptionPane.showMessageDialog(null, "Please select a row first");
@@ -128,7 +126,6 @@ public class GUI {
 	
 	private class ReadButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Read");
 			ReadPopup readPopup = new ReadPopup(crud);
 			readPopup.bySku();
 		}
@@ -150,13 +147,9 @@ public class GUI {
 		ResultSet rs = crud.getAllLines();
 		try {
 			while (rs.next()) {
-				String sku = rs.getString("SKU");
-				String description = rs.getString("Description");
-				Double netCost = rs.getDouble("Net_Cost");
-				model.addRow(new Object[] {sku, description, netCost});
+				model.addRow(new Object[] {rs.getString("SKU"), rs.getString("Description"), rs.getDouble("Net_Cost")});
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}

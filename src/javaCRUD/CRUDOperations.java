@@ -13,14 +13,14 @@ public class CRUDOperations {
 	}
 
 	
-	public void create(String sku, String description, double netCost) {
+	public void create(LineItem item) {
 		/* INSERT ITEMS */
 		try {
 			String sql = String.format("INSERT INTO items(SKU, Description, Net_Cost) VALUES(?,?,?)");
 			this.ps = conn.prepareStatement(sql);
-			this.ps.setString(1, sku);
-			this.ps.setString(2, description);
-			this.ps.setDouble(3, netCost);
+			this.ps.setString(1, item.getSku());
+			this.ps.setString(2, item.getDescription());
+			this.ps.setDouble(3, item.getNetCost());
 			this.ps.execute();
 		} catch (SQLIntegrityConstraintViolationException ed) {
 			JOptionPane.showMessageDialog(null, "ERROR : Duplicate SKU - Creation aborted");
@@ -68,15 +68,26 @@ public class CRUDOperations {
 	}
 	
 	
-	public void updateBySku(String sku, String newSku, String newDescription, Double newNetCost) {
+	public void deleteAll() {
+		try {
+			String sql = String.format("DELETE FROM items");
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.executeUpdate();
+		}catch (SQLException e) {
+			System.out.println(e.toString() + " *CRUDOperations.deleteBySku");
+		}
+	}
+	
+	
+	public void updateBySku(String sku, LineItem item) {
 		try {
 			String sql = String.format("SELECT * FROM items WHERE SKU = '%s';", sku);
 			PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				rs.updateString("SKU", newSku);
-				rs.updateString("Description", newDescription);
-				rs.updateDouble("Net_Cost", newNetCost);
+			if (rs.next()) {
+				rs.updateString("SKU", item.getSku());
+				rs.updateString("Description", item.getDescription());
+				rs.updateDouble("Net_Cost", item.getNetCost());
 				rs.updateRow();
 			}
 		}catch (SQLException e) {
