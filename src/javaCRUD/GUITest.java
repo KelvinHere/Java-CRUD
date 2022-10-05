@@ -28,7 +28,7 @@ class GUITest {
 		im = setUp();
 		LineItem item1 = new LineItem(ITEM_1_SKU, ITEM_1_DESCRIPTION, ITEM_1_NET_COST);
 		im.crud.create(item1);
-		im.gui.updateDataTable();
+		im.gui.updateDataTable("");
 		JTable dataTable = im.gui.getDataTable();
 		String tableSku = dataTable.getValueAt(0, 0).toString();
 		String tableDescription = dataTable.getValueAt(0, 1).toString();

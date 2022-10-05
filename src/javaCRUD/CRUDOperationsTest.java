@@ -99,7 +99,7 @@ class CRUDOperationsTest {
 		LineItem item2 = new LineItem(NEW_SKU, NEW_DESCRIPTION, NEW_NET_COST);
 		im.crud.create(item2);
 		
-		ResultSet rs = im.crud.getAllLines();
+		ResultSet rs = im.crud.getAllLines("");
 		int expectedLines = 2;
 		int lineCount = 0;
 		

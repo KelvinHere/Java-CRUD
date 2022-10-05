@@ -47,10 +47,10 @@ public class CRUDOperations {
 	}
 	
 	
-	public ResultSet getAllLines() {
+	public ResultSet getAllLines(String order) {
 		ResultSet rs = null;
 		try {
-			String sql = "SELECT * FROM items;";
+			String sql = String.format("SELECT * FROM items %s;", order);
 			PreparedStatement ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 		}catch (SQLException e) {
