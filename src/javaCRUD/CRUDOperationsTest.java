@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.hsqldb.util.DatabaseManagerSwing;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,10 +17,6 @@ class CRUDOperationsTest {
 	private static final double NEW_NET_COST = 29.99;
 	private static final String NEW_DESCRIPTION = "MY NEW DESCRIUPTION";
 	private static final String NEW_SKU = "MYNEWSKU";
-	
-	private static final String COL_NAME_SKU = "SKU";
-	private static final String COL_NAME_DESCRIPTION = "Description";
-	private static final String COL_NAME_NET_COST = "Net_Cost";
 	
 	ItemManager im;
 	

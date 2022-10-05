@@ -7,7 +7,6 @@ public class UpdateCreatePopup {
 	private String sku = "";
 	private String description = "";
 	private String netCostAsString = "";
-	private Double netCost = null;
 	private CRUDOperations crud;
 	
 		JTextField skuField = new JTextField();

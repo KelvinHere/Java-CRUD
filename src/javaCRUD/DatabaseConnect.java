@@ -19,7 +19,7 @@ public class DatabaseConnect {
 			stmnt.execute(ModelItems.itemModel());
 			
 		} catch (SQLException e ) {
-			System.out.println(e.getMessage() + " *connection class");
+			System.out.println(e.getMessage() + " *Database connection class");
 		}
 		return conn;
 	}
