@@ -5,8 +5,9 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class CRUDOperations {
-	Connection conn;
-	PreparedStatement ps;
+	private Connection conn;
+	private PreparedStatement ps;
+	Boolean testMode = false;
 	
 	public CRUDOperations(Connection conn) {
 		this.conn = conn;
@@ -23,7 +24,9 @@ public class CRUDOperations {
 			this.ps.setDouble(3, item.getNetCost());
 			this.ps.execute();
 		} catch (SQLIntegrityConstraintViolationException ed) {
+			if (testMode == false) {
 			JOptionPane.showMessageDialog(null, "ERROR : Duplicate SKU - Creation aborted");
+			}
 		} catch (SQLException e) {
 			String errorCode = String.valueOf(e.getErrorCode());
 			JOptionPane.showMessageDialog(null, "ERROR : Code " + errorCode);

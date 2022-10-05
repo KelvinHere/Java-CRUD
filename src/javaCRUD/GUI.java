@@ -15,18 +15,18 @@ public class GUI {
 	final static int FRAME_HEIGHT = 720;
 	final static Object[] TABLE_HEADERS = {"SKU", "Description", "Net Cost"};
 	final static Object[][] TABLE_DATA = {};
-	JFrame frame;
-	JButton createButton;
-	JButton readButton;
-	JButton updateButton;
-	JButton deleteButton;
-	JButton importButton;
+	private JFrame frame;
+	private JButton createButton;
+	private JButton readButton;
+	private JButton updateButton;
+	private JButton deleteButton;
+	private JButton importButton;
 	
-	DefaultTableModel model = new DefaultTableModel(TABLE_DATA, TABLE_HEADERS);
-	JTable dataTable;
+	private DefaultTableModel model = new DefaultTableModel(TABLE_DATA, TABLE_HEADERS);
+	private JTable dataTable;
 	
-	Connection conn;
-	CRUDOperations crud;
+	private Connection conn;
+	private CRUDOperations crud;
 	
 	public GUI(Connection conn, CRUDOperations crud) {
 		this.conn = conn;
@@ -140,7 +140,7 @@ public class GUI {
 	}
 	
 	
-	private void updateDataTable() {
+	public void updateDataTable() {
 		// Clear table
 		model.setRowCount(0);
 		// Update table
@@ -152,5 +152,10 @@ public class GUI {
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public JTable getDataTable() {
+		return dataTable;
 	}
 }
